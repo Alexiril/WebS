@@ -1,1 +1,3 @@
-print("WebS is here!")
+import server
+
+server.WebServer()
