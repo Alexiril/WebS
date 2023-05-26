@@ -10,13 +10,14 @@ class WebServer(http.server.ThreadingHTTPServer):
     def __init__(self, activate: bool = True) -> None:
         server_address = (options.ServerHost, options.ServerPort)
         super().__init__(server_address, RequestHandlerClass=handler.Handler)
-        options.SQLConnection = mysql.connector.connect(
+        options.SQLConnection = mysql.connector.connect( # type: ignore
             host=options.SQLHost,
             port=options.SQLPort,
             user=options.SQLUser,
             passwd=options.SQLPassword
         )
-        if options.SQLConnection != None:
+        if isinstance(options.SQLConnection, mysql.connector.MySQLConnection) \
+            or isinstance(options.SQLConnection, mysql.connector.pooling.PooledMySQLConnection):
             with options.SQLConnection.cursor() as cursor:
                 cursor.execute("show databases")
                 fetched = cursor.fetchall()
@@ -26,10 +27,10 @@ class WebServer(http.server.ThreadingHTTPServer):
                         options.SQLConnection.commit()
                     cursor.execute(f"use `{options.SQLDBName}`")
                     options.SQLConnection.commit()
-        database.checkTables()
+            database.checkTables()
         if options.SSLCertificate != "" and options.SSLKey != "":
             self.socket = ssl.wrap_socket(
-                self.socket,
+                sock=self.socket,
                 server_side = True,
                 certfile = options.SSLCertificate,
                 keyfile = options.SSLKey,

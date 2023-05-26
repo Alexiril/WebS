@@ -14,7 +14,7 @@ SQLPassword: str = ""
 SQLDBName: str = "test"
 SQLConnection: PooledMySQLConnection | MySQLConnection | None = None
 
-mimeTypes = {
+mimeTypes: dict[str, str] = {
     "aac": "audio/aac",
     "abw": "application/x-abiword",
     "arc": "application/x-freearc",

@@ -10,7 +10,7 @@ class ServerException(Exception):
 
 
 def getInternalExceptionPage(serverName: str, serverVersion: str, reason: str, path: str) -> str:
-    year, month, day, hh, mm, ss, x, y, z = time.localtime()
+    year, month, day, hh, mm, ss, _, _, _ = time.localtime()
     actualTime = "%02d/%02d/%04d %02d:%02d:%02d" % (day, month, year, hh, mm, ss)
     return f"""<!DOCTYPE html>
                 <html lang="en">

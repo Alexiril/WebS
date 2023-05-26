@@ -4,13 +4,18 @@ from exception import ServerException, getInternalExceptionPage
 import database
 import os
 import builder
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from socketserver import BaseServer
+    from typing import Any
 
 class Handler(http.server.BaseHTTPRequestHandler):
     responceContent: bytes
     responceCode: int
     contentType: str
 
-    def __init__(self, request, client_address, server) -> None:
+    def __init__(self, request: Any, client_address: tuple[str, int], server: BaseServer) -> None:
         self.responceContent = bytes()
         self.responceCode = 200
         self.contentType = "application/octet-stream"

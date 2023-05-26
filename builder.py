@@ -1,23 +1,26 @@
 from html.parser import HTMLParser
-from typing import Sequence
-from exception import ServerException
 from functions import getLangCode, getSiteTitle
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from handler import Handler
+    from typing import Sequence, Any
 
 class PythonUnwrapper(HTMLParser):
     result: str
-    pythonGlobals: dict
-    echoed: list
-    values: dict
+    pythonGlobals: dict[Any, Any]
+    echoed: list[str]
+    values: dict[str, Any]
 
     def __init__(self) -> None:
         self.result = ""
         self.echoed = list()
-        def echo(string):
+        def echo(string: str) -> None:
             self.echoed.append(string)
-        def load(string):
+        def load(string: str) -> str:
             with open(string) as f:
                 return PythonUnwrapper().prepareHtml(self.values, f.read())
-        def value(name):
+        def value(name: str) -> Any:
             return self.values.get(name)
         self.pythonGlobals = {
             "echo": echo,
@@ -51,7 +54,7 @@ class PythonUnwrapper(HTMLParser):
     def handle_startendtag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         self.handle_starttag(tag, attrs)
 
-    def prepareHtml(self, values: dict, data: str) -> str:
+    def prepareHtml(self, values: dict[str, Any], data: str) -> str:
         self.result = ""
         self.values = values
         self.feed(data)
@@ -59,10 +62,8 @@ class PythonUnwrapper(HTMLParser):
 
 builder = PythonUnwrapper()
 
-def buildPage(handler, content: Sequence[str]) -> None:
-    if type(content) == ServerException:
-        raise ServerException(content.code, *content.args) # type: ignore
-    values = {
+def buildPage(handler: Handler, content: Sequence[str]) -> None:
+    values: dict[str, Any] = {
         "langCode": getLangCode(),
         "pageTitle": content[5] if content[5] != "" else getSiteTitle(),
         "pageContent": content[2]

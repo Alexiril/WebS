@@ -1,8 +1,11 @@
 import options
 from exception import ServerException
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from typing import Any
 
-def getPageFromDB(pageURL: str) -> list:
+def getPageFromDB(pageURL: str) -> list[Any]:
     if options.SQLConnection != None:
         with options.SQLConnection.cursor() as cursor:
             cursor.execute(
@@ -11,9 +14,9 @@ def getPageFromDB(pageURL: str) -> list:
             if fetched != None:
                 return list(fetched)
             else:
-                return ServerException(404, "No object in the database") # type: ignore
+                raise ServerException(404, "No object in the database")
     else:
-        return ServerException(500, "No database connection") # type: ignore
+        raise ServerException(500, "No database connection")
 
 
 def checkTables():
