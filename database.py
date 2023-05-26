@@ -11,9 +11,9 @@ def getPageFromDB(pageURL: str) -> list:
             if fetched != None:
                 return list(fetched)
             else:
-                return ServerException(404) # type: ignore
+                return ServerException(404, "No object in the database") # type: ignore
     else:
-        return ServerException(500) # type: ignore
+        return ServerException(500, "No database connection") # type: ignore
 
 
 def checkTables():

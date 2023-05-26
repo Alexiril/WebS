@@ -61,8 +61,7 @@ builder = PythonUnwrapper()
 
 def buildPage(handler, content: Sequence[str]) -> None:
     if type(content) == ServerException:
-        handler.responceException(content.code)
-        return
+        raise ServerException(content.code, *content.args) # type: ignore
     values = {
         "langCode": getLangCode(),
         "pageTitle": content[5] if content[5] != "" else getSiteTitle(),

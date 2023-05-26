@@ -27,7 +27,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     self.contentType = options.mimeTypes[ext]
                 correctPath = os.path.join(os.getcwd(), os.path.sep.join(self.path.split("/")).lstrip(os.path.sep))
                 if not os.path.exists(correctPath):
-                    raise ServerException(404)
+                    raise ServerException(404, "Cannot find the shared object")
                 with open(correctPath, "rb") as file:
                     self.responceContent = file.read()
                     return
@@ -51,7 +51,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     reverseStack = reverseStack.tb_next
                 reverseStack = f"file: {reverseStack.tb_frame.f_code.co_filename.split(os.path.sep)[-1]}, index: ({reverseStack.tb_lineno}, {reverseStack.tb_lasti})"
             self.responceContent = getInternalExceptionPage(
-                self.version_string(), super().version_string(), f"loading {code} error page <br>({e}{f', {reverseStack}' if reverseStack != None else ''})", self.path).encode()
+                self.version_string(), super().version_string(), f"loading {code} error page <br>({e if len(e.args) > 0 else 'Exception'}{f': {reverseStack}' if reverseStack != None else ''})", self.path).encode()
 
     def do_GET(self):
         self.do_HEAD()
