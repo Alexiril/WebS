@@ -1,10 +1,14 @@
+from __future__ import annotations
+
 from html.parser import HTMLParser
-from functions import getLangCode, getSiteTitle
 from typing import TYPE_CHECKING
 
+from functions import getLangCode, getSiteTitle
+
 if TYPE_CHECKING:
+    from typing import Any, Sequence
+
     from handler import Handler
-    from typing import Sequence, Any
 
 class PythonUnwrapper(HTMLParser):
     result: str

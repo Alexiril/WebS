@@ -1,5 +1,6 @@
 from mysql.connector import MySQLConnection
 from mysql.connector.pooling import PooledMySQLConnection
+from mysql.connector import CMySQLConnection
 
 ServerName: str = "Python HTTP Web Server"
 ServerHost: str = "localhost"
@@ -12,7 +13,7 @@ SQLHost: str = "localhost"
 SQLUser: str = "root"
 SQLPassword: str = ""
 SQLDBName: str = "test"
-SQLConnection: PooledMySQLConnection | MySQLConnection | None = None
+SQLConnection: PooledMySQLConnection | MySQLConnection | CMySQLConnection | None = None
 
 mimeTypes: dict[str, str] = {
     "aac": "audio/aac",

@@ -1,10 +1,13 @@
+from __future__ import annotations
+
 import http.server
+import os
+from typing import TYPE_CHECKING
+
+import builder
+import database
 import options
 from exception import ServerException, getInternalExceptionPage
-import database
-import os
-import builder
-from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from socketserver import BaseServer

@@ -17,7 +17,8 @@ class WebServer(http.server.ThreadingHTTPServer):
             passwd=options.SQLPassword
         )
         if isinstance(options.SQLConnection, mysql.connector.MySQLConnection) \
-            or isinstance(options.SQLConnection, mysql.connector.pooling.PooledMySQLConnection):
+            or isinstance(options.SQLConnection, mysql.connector.pooling.PooledMySQLConnection) \
+            or isinstance(options.SQLConnection, mysql.connector.CMySQLConnection):
             with options.SQLConnection.cursor() as cursor:
                 cursor.execute("show databases")
                 fetched = cursor.fetchall()
