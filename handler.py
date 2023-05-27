@@ -40,7 +40,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                     self.responceContent = file.read()
                     return
             self.contentType = "text/html"
-            builder.buildPage(self, database.getPageFromDB(self.path))
+            builder.buildPage(self, self.path)
         except ServerException as e:
             self.responceException(e.code)
         except Exception as e:
@@ -50,7 +50,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         self.responceCode = code
         self.contentType = "text/html"
         try:
-            builder.buildPage(self, database.getPageFromDB(f"$exception{code}"))
+            builder.buildPage(self, f"$exception{code}")
         except Exception as e:
             reverseStack = None
             if e.__traceback__ != None:
